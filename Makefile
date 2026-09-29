@@ -42,6 +42,7 @@ ROMFS		:=	romfs
 APP_TITLE	:=	Sharkive Updater
 APP_DESCRIPTION	:=	Sharkive cheat updater for Luma3DS
 APP_AUTHOR	:=	Marlon Schmitz
+ICON		:=	meta/icon.png
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -160,7 +161,7 @@ ifneq ($(ROMFS),)
 	export _3DSXFLAGS += --romfs=$(CURDIR)/$(ROMFS)
 endif
 
-.PHONY: all clean
+.PHONY: all clean cia
 
 #---------------------------------------------------------------------------------
 all: $(BUILD) $(GFXBUILD) $(DEPSDIR) $(ROMFS_T3XFILES) $(T3XHFILES)
@@ -168,6 +169,13 @@ all: $(BUILD) $(GFXBUILD) $(DEPSDIR) $(ROMFS_T3XFILES) $(T3XHFILES)
 
 $(BUILD):
 	@mkdir -p $@
+
+#---------------------------------------------------------------------------------
+cia: all
+	@bannertool makebanner -i meta/banner.png -a meta/banner.wav -o $(BUILD)/banner.bnr
+	@makerom -f cia -o $(TARGET).cia -target t -exefslogo -rsf meta/app.rsf \
+		-elf $(TARGET).elf -icon $(TARGET).smdh -banner $(BUILD)/banner.bnr
+	@echo built ... $(TARGET).cia
 
 ifneq ($(GFXBUILD),$(BUILD))
 $(GFXBUILD):
@@ -182,7 +190,7 @@ endif
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
-	@rm -fr $(BUILD) $(TARGET).3dsx $(OUTPUT).smdh $(TARGET).elf $(GFXBUILD)
+	@rm -fr $(BUILD) $(TARGET).3dsx $(TARGET).cia $(OUTPUT).smdh $(TARGET).elf $(GFXBUILD)
 
 #---------------------------------------------------------------------------------
 $(GFXBUILD)/%.t3x	$(BUILD)/%.h	:	%.t3s

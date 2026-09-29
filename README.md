@@ -17,13 +17,16 @@ Im Spiel: **L + Steuerkreuz runter + SELECT** → Rosalina-Menü → *Cheats*.
 Voraussetzung: Docker.
 
 ```sh
-./build.sh
+./build.sh       # sharkive-updater.3dsx
+./build.sh cia   # zusätzlich sharkive-updater.cia
+./build.sh clean
 ```
 
-Ergebnis: `sharkive-updater.3dsx`. `./build.sh clean` räumt auf.
+GitHub Actions baut bei jedem Push beide Dateien (Artifacts). Ein Tag `v*` erstellt automatisch ein Release.
 
 ## Installieren
 
-1. `sharkive-updater.3dsx` nach `sd:/3ds/` kopieren.
-2. Auf dem 3DS den Homebrew Launcher starten und *Sharkive Updater* öffnen.
-3. WLAN muss verbunden sein; Luma3DS muss installiert sein.
+- **.3dsx:** nach `sd:/3ds/` kopieren, über den Homebrew Launcher starten.
+- **.cia:** mit FBI o. ä. installieren, erscheint im HOME-Menü.
+
+WLAN muss verbunden sein; Luma3DS muss installiert sein.
