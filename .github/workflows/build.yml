@@ -30,4 +30,11 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" sharkive-updater.3dsx sharkive-updater.cia --generate-notes
+        run: |
+          base="https://github.com/$GITHUB_REPOSITORY/releases/download/$GITHUB_REF_NAME"
+          sudo apt-get install -y -qq qrencode
+          qrencode -s 8 -m 2 -o cia-qr.png "$base/sharkive-updater.cia"
+          gh release create "$GITHUB_REF_NAME" sharkive-updater.3dsx sharkive-updater.cia cia-qr.png --generate-notes \
+            --notes "Scan with FBI (Remote Install → Scan QR Code) to install the CIA:
+
+          ![CIA QR code]($base/cia-qr.png)"
